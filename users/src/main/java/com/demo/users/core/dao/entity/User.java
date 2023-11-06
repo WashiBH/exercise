@@ -32,6 +32,7 @@ public class User implements UserDetails{
   private LocalDateTime modifiedAt;
   private LocalDateTime lastLoginAt;
   private Boolean isActive;
+  private String token;
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -24,14 +24,12 @@ public class UserRestController implements UsersApi {
   private final UserToEntityMapper userToEntityMapper;
   private final UserToResponseMapper userToResponseMapper;
   private final PhoneToDtoMapper phoneToDtoMapper;
-  private final JwtService jwtService;
 
-  public UserRestController(UserService userService, UserToEntityMapper userToEntityMapper, UserToResponseMapper userToResponseMapper, PhoneToDtoMapper phoneToDtoMapper, JwtService jwtService) {
+  public UserRestController(UserService userService, UserToEntityMapper userToEntityMapper, UserToResponseMapper userToResponseMapper, PhoneToDtoMapper phoneToDtoMapper) {
     this.userService = userService;
     this.userToEntityMapper = userToEntityMapper;
     this.userToResponseMapper = userToResponseMapper;
     this.phoneToDtoMapper = phoneToDtoMapper;
-    this.jwtService = jwtService;
   }
 
 
@@ -45,9 +43,7 @@ public class UserRestController implements UsersApi {
         phone.setUserId(entity.getId());
         userService.savePhone(phone);
       });
-    UserResponse userResponse = userToResponseMapper.toMap(entity);
-    userResponse.setToken(jwtService.generateToken(entity));
-    response.put("user", userResponse);
+    response.put("user", userToResponseMapper.toMap(entity));
     return ResponseEntity.status(HttpStatus.CREATED).body(response);
   }
 

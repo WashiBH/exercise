@@ -22,9 +22,12 @@ public class UserServiceImpl implements UserService{
   private final UserFacadeDao userDao;
   private final PasswordEncoder passwordEncoder;
 
-  public UserServiceImpl(UserFacadeDao userDao, PasswordEncoder passwordEncoder ) {
+  private final JwtService jwtService;
+
+  public UserServiceImpl(UserFacadeDao userDao, PasswordEncoder passwordEncoder, JwtService jwtService) {
     this.userDao = userDao;
     this.passwordEncoder = passwordEncoder;
+    this.jwtService = jwtService;
   }
 
   @Override
@@ -36,6 +39,7 @@ public class UserServiceImpl implements UserService{
     user.setLastLoginAt(user.getCreatedAt());
     user.setIsActive(true);
     user.setPassword(passwordEncoder.encode(user.getPassword()));
+    user.setToken(jwtService.generateToken(user));
     Optional<User> userOptional = userDao.saveUser(user);
     if (userOptional.isEmpty()){
       throw new UserException("Algo salió mal, espere un momento por favor.");

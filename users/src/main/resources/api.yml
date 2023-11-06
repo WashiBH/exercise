@@ -10,6 +10,7 @@ servers:
 
 tags:
   - name: users
+  - name: authentication
 
 paths:
   /users:
@@ -113,6 +114,29 @@ paths:
       responses:
         "400":
           description: El Id proporcionado es inválido
+  /authentication:
+    post:
+      tags:
+        - authentication
+      summary: Loguearse
+      description: Autenticarse al sistema
+      operationId: login
+      requestBody:
+        description: Datos para la autenticación
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthRequest'
+        required: true
+      responses:
+        "200":
+          description: Autenticación exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        "405":
+          description: Entrada invalida
 components:
   schemas:
     Response:
@@ -161,3 +185,14 @@ components:
           type: string
           description: Código de país
           example: "57"
+    AuthRequest:
+      type: object
+      description: Datos de autenticación
+      properties:
+        username:
+          type: string
+          description: El username viene a ser email
+          example: juan@rodriguez.org
+        password:
+          type: string
+          description: Password de autenticación.

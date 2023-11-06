@@ -31,6 +31,9 @@ class UserServiceImplTest {
   @Mock
   private PasswordEncoder passwordEncoder;
 
+  @Mock
+  private JwtService jwtService;
+
   @Test
   void testSuccessSaveUser() {
     User expected = new User();
