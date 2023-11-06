@@ -1,0 +1,163 @@
+openapi: '3.0.0'
+
+info:
+  title: Users service
+  description: Usuarios
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8581
+
+tags:
+  - name: users
+
+paths:
+  /users:
+    post:
+      tags:
+        - users
+      summary: Agregar un nuevo usuario
+      description: Agregar un nuevo usuario a la base de datos
+      operationId: addUser
+      requestBody:
+        description: Crear un nuevo usuario en la base de datos
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserDto'
+        required: true
+      responses:
+        "200":
+          description: Operación exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        "405":
+          description: Entrada invalida
+  /users/{userId}:
+    put:
+      tags:
+        - users
+      summary: Modificar un usario existente
+      description: Modificar un usario existente por Id
+      operationId: updateUser
+      parameters:
+        - name: userId
+          in: path
+          description: Id del usuario a modificar
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Modificar un usuario existente en la base de datos
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserDto'
+        required: true
+      responses:
+        "200":
+          description: Operación exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        "400":
+          description: El Id proporcionado es inválido
+        "404":
+          description: Usuario no encontrado
+        "405":
+          description: Excepción de validación
+    get:
+      tags:
+        - users
+      summary: Encontrar usuario por Id
+      description: Retorna el usuario encontrado
+      operationId: getUserById
+      parameters:
+        - name: userId
+          in: path
+          description: Id del usuario a retornar
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Operación exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        "400":
+          description: El Id proporcionado es inválido
+        "404":
+          description: Usuario no encontrado
+    delete:
+      tags:
+        - users
+      summary: Eliminar un usario
+      description: Eliminar un usario de la base de datos
+      operationId: deleteUser
+      parameters:
+        - name: userId
+          in: path
+          description: Id del usuario a eliminar
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        "400":
+          description: El Id proporcionado es inválido
+components:
+  schemas:
+    Response:
+      type: object
+      additionalProperties:
+        type: object
+    UserDto:
+      required:
+        - name
+        - email
+        - password
+      type: object
+      description: Datos del usuario
+      properties:
+        name:
+          type: string
+          description: Nombre del usuario
+          example: Juan Rodriguez
+        email:
+          type: string
+          description: Correo
+          pattern: '[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$'
+          example: juan@rodriguez.org
+        password:
+          type: string
+          description: Contraseña
+          example: hunter2
+        phones:
+          type: array
+          items:
+            $ref: '#/components/schemas/PhoneDto'
+    PhoneDto:
+      type: object
+      description: Datos del telefono
+      properties:
+        number:
+          type: string
+          description: Numero de telefono
+          pattern: '[0-9]'
+          example: "940000000"
+        cityCode:
+          type: string
+          description: Código de ciudad
+          example: "1"
+        countryCode:
+          type: string
+          description: Código de país
+          example: "57"
