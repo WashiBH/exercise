@@ -114,15 +114,15 @@ paths:
       responses:
         "400":
           description: El Id proporcionado es inválido
-  /authentication:
+  /auth/sign-in:
     post:
       tags:
         - authentication
       summary: Loguearse
-      description: Autenticarse al sistema
-      operationId: login
+      description: Loguearse al sistema
+      operationId: signIn
       requestBody:
-        description: Datos para la autenticación
+        description: Datos para el login
         content:
           application/json:
             schema:

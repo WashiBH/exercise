@@ -29,6 +29,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
   }
 
+  @ExceptionHandler(UserNotFoundException.class)
+  public ResponseEntity<Map<String, Object>> userNotFoundException(UserNotFoundException exception){
+    Map<String, Object> error = new HashMap<>();
+    error.put("mensaje", exception.getMessage());
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+  }
+
   @ExceptionHandler(PhoneException.class)
   public ResponseEntity<Map<String, Object>> phoneException(PhoneException exception){
     Map<String, Object> error = new HashMap<>();

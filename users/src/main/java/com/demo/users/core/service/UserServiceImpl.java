@@ -7,6 +7,7 @@ import com.demo.users.core.dao.http.dto.PhoneResponse;
 import com.demo.users.error.PhoneException;
 import com.demo.users.error.UserEmailFoundException;
 import com.demo.users.error.UserException;
+import com.demo.users.error.UserNotFoundException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -44,8 +45,38 @@ public class UserServiceImpl implements UserService{
     if (userOptional.isEmpty()){
       throw new UserException("Algo salió mal, espere un momento por favor.");
     }
-    user = userOptional.get();
-    return user;
+    return userOptional.get();
+  }
+
+  @Override
+  public User updateUser(String userId, User user) {
+    Optional<User> userOptional = userDao.findUserById(userId);
+    if(userOptional.isEmpty()){
+      throw new UserNotFoundException("El usuario con ID "+userId+" no fue encontrado.");
+    }
+    User userUpdate = userOptional.get();
+    userUpdate.setName(user.getName());
+    userUpdate.setModifiedAt(LocalDateTime.now());
+    userOptional = userDao.saveUser(userUpdate);
+    if (userOptional.isEmpty()){
+      throw new UserException("Algo salió mal, espere un momento por favor.");
+    }
+    return userOptional.get();
+  }
+
+  @Override
+  public void deleteUser(String userId) {
+    Optional<User> userOptional = userDao.findUserById(userId);
+    if(userOptional.isEmpty()){
+      throw new UserNotFoundException("El usuario con ID "+userId+" no fue encontrado.");
+    }
+    User userDelete = userOptional.get();
+    userDelete.setModifiedAt(LocalDateTime.now());
+    userDelete.setIsActive(false);
+    userOptional = userDao.saveUser(userDelete);
+    if(userOptional.isEmpty()){
+      throw new UserException("Algo salió mal, espere un momento por favor.");
+    }
   }
 
   @CircuitBreaker(name = "backendPhones", fallbackMethod = "fallBackSavePhone")

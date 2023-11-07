@@ -36,20 +36,21 @@ public class UserRestController implements UsersApi {
   @Override
   public ResponseEntity<Map<String, Object>> addUser(@Valid UserDto userDto) {
     Map<String, Object> response = new HashMap<>();
-    User entity = userService.saveUser(userToEntityMapper.toMap(userDto));
+    User user = userService.saveUser(userToEntityMapper.toMap(userDto));
     userDto.getPhones().stream()
       .map(phoneToDtoMapper::toMap)
       .forEach(phone -> {
-        phone.setUserId(entity.getId());
+        phone.setUserId(user.getId());
         userService.savePhone(phone);
       });
-    response.put("user", userToResponseMapper.toMap(entity));
+    response.put("user", userToResponseMapper.toMap(user));
     return ResponseEntity.status(HttpStatus.CREATED).body(response);
   }
 
   @Override
   public ResponseEntity<Void> deleteUser(String userId) {
-    return UsersApi.super.deleteUser(userId);
+    userService.deleteUser(userId);
+    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
 
   @Override
@@ -59,7 +60,16 @@ public class UserRestController implements UsersApi {
 
   @Override
   public ResponseEntity<Map<String, Object>> updateUser(String userId, UserDto userDto) {
-    return UsersApi.super.updateUser(userId, userDto);
+    Map<String, Object> response = new HashMap<>();
+    User user = userService.updateUser(userId, userToEntityMapper.toMap(userDto));
+    userDto.getPhones().stream()
+      .map(phoneToDtoMapper::toMap)
+      .forEach(phone -> {
+        phone.setUserId(user.getId());
+        userService.savePhone(phone);
+      });
+    response.put("user", userToResponseMapper.toMap(user));
+    return ResponseEntity.status(HttpStatus.OK).body(response);
   }
 
 

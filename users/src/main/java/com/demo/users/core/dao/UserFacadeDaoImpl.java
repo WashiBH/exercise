@@ -33,6 +33,11 @@ public class UserFacadeDaoImpl implements UserFacadeDao{
   }
 
   @Override
+  public Optional<User> findUserById(String userId) {
+    return userRepository.findById(userId);
+  }
+
+  @Override
   public Optional<PhoneResponse> savePhone(PhoneDto phoneDto) {
 
     return Optional.of(phoneFeignClient.savePhone(phoneDto));
