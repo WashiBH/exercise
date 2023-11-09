@@ -12,5 +12,5 @@ public interface PhoneFeignClient {
   public PhoneResponse savePhone(@RequestBody PhoneDto phoneDto);
 
   @GetMapping("/phones/{userId}")
-  public List<PhoneResponse> findUserPhones(@PathVariable String userId);
+  public List<PhoneResponse> getAllPhonesForUser(@PathVariable String userId);
 }

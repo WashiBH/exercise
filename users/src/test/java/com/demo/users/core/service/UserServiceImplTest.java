@@ -1,9 +1,9 @@
 package com.demo.users.core.service;
 
-import com.demo.users.core.dao.UserFacadeDao;
 import com.demo.users.core.dao.entity.User;
 import com.demo.users.core.dao.http.dto.PhoneDto;
 import com.demo.users.core.dao.http.dto.PhoneResponse;
+import com.demo.users.core.facade.UserFacadeDao;
 import com.demo.users.error.PhoneException;
 import com.demo.users.error.UserEmailFoundException;
 import com.demo.users.error.UserException;

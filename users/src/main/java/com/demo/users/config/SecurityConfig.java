@@ -48,8 +48,9 @@ public class SecurityConfig {
 
   private RequestMatcher publicEndPoints() {
     return new OrRequestMatcher(
+        new AntPathRequestMatcher("/**")/*,
         new AntPathRequestMatcher(HttpMethod.POST, "/users"),
-        new AntPathRequestMatcher("/authentication")
+        new AntPathRequestMatcher("/authentication")*/
     );
   }
 }

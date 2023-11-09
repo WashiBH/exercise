@@ -50,12 +50,19 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
   }
 
+  @ExceptionHandler(UniqueConstraintViolationException.class)
+  public ResponseEntity<Map<String, Object>> handleUniqueConstraintViolationException(UniqueConstraintViolationException exception) {
+    Map<String, Object> error = new HashMap<>();
+    error.put("mensaje", exception.getMessage());
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+  }
+
   @Override
   protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
     Map<String,Object> errors = new HashMap<>();
-    ex.getBindingResult().getFieldErrors().forEach(error -> {
-      errors.put(error.getField(), error.getDefaultMessage());
-    });
+    ex.getBindingResult().getFieldErrors().forEach(error ->
+      errors.put(error.getField(), error.getDefaultMessage())
+    );
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
   }
 }

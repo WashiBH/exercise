@@ -4,14 +4,12 @@ import com.demo.users.core.dao.entity.User;
 import com.demo.users.integration.dto.UserDto;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
-
 @Component
-public class UserToEntityMapper implements Mapper<User, UserDto>{
+public class UserToDtoMapper implements Mapper<UserDto, User>{
   @Override
-  public User toMap(UserDto dto) {
-    User user = new User();
-    BeanUtils.copyProperties(dto, user);
-    return user;
+  public UserDto toMap(User in) {
+    UserDto dto = new UserDto();
+    BeanUtils.copyProperties(in, dto);
+    return dto;
   }
-
 }

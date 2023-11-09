@@ -1,4 +1,4 @@
-package com.demo.users.core.dao;
+package com.demo.users.core.facade;
 
 import com.demo.users.core.dao.entity.User;
 import com.demo.users.core.dao.http.dto.PhoneDto;
@@ -12,5 +12,5 @@ public interface UserFacadeDao {
   public Optional<User> findUserById(String userId);
   public Optional<PhoneResponse> savePhone(PhoneDto phoneDto);
 
-  public Optional<List<PhoneResponse>> findUserPhones(String userId);
+  public Optional<List<PhoneResponse>> getAllPhonesForUser(String userId);
 }

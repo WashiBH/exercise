@@ -1,6 +1,7 @@
 package com.demo.users.config;
 
-import com.demo.users.core.dao.repository.UserRepository;
+import com.demo.users.core.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,12 +13,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
+@RequiredArgsConstructor
 public class AppConfig {
   private final UserRepository userRepository;
-
-  public AppConfig(UserRepository userRepository) {
-    this.userRepository = userRepository;
-  }
 
   @Bean
   public UserDetailsService userDetailsService(){

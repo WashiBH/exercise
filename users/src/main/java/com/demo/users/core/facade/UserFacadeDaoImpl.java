@@ -1,19 +1,18 @@
-package com.demo.users.core.dao;
+package com.demo.users.core.facade;
 
 import com.demo.users.core.dao.entity.User;
 import com.demo.users.core.dao.http.PhoneFeignClient;
 import com.demo.users.core.dao.http.dto.PhoneDto;
 import com.demo.users.core.dao.http.dto.PhoneResponse;
-import com.demo.users.core.dao.repository.UserRepository;
+import com.demo.users.core.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 @Repository
 @Slf4j
-public class UserFacadeDaoImpl implements UserFacadeDao{
+public class UserFacadeDaoImpl implements UserFacadeDao {
   private final UserRepository userRepository;
   private final PhoneFeignClient phoneFeignClient;
 
@@ -44,7 +43,7 @@ public class UserFacadeDaoImpl implements UserFacadeDao{
   }
 
   @Override
-  public Optional<List<PhoneResponse>> findUserPhones(String userId) {
-    return Optional.of(phoneFeignClient.findUserPhones(userId));
+  public Optional<List<PhoneResponse>> getAllPhonesForUser(String userId) {
+    return Optional.of(phoneFeignClient.getAllPhonesForUser(userId));
   }
 }

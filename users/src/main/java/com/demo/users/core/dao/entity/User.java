@@ -1,8 +1,6 @@
 package com.demo.users.core.dao.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,8 +22,7 @@ public class User implements UserDetails{
   @GeneratedValue(strategy = GenerationType.UUID)
   private String id;
   private String name;
-  @Email(message = "El email no es válido.", regexp = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$")
-  @NotEmpty(message = "El email no puede ser vacio.")
+  @Column(unique = true)
   private String email;
   private String password;
   private LocalDateTime createdAt;

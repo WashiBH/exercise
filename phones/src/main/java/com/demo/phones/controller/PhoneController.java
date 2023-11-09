@@ -6,10 +6,18 @@ import com.demo.phones.controller.mapper.PhoneToEntityMapper;
 import com.demo.phones.controller.mapper.PhoneToResponseMapper;
 import com.demo.phones.entity.Phone;
 import com.demo.phones.service.PhoneService;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+/**
+ * Clase REST que contiene los HTTP endpoints.
+ */
+@RequiredArgsConstructor
 @RestController
 public class PhoneController {
 
@@ -17,23 +25,23 @@ public class PhoneController {
   private final PhoneToEntityMapper phoneToEntityMapper;
   private final PhoneToResponseMapper phoneToResponseMapper;
 
-  public PhoneController(PhoneService phoneService, PhoneToEntityMapper phoneToEntityMapper, PhoneToResponseMapper phoneToResponseMapper) {
-    this.phoneService = phoneService;
-    this.phoneToEntityMapper = phoneToEntityMapper;
-    this.phoneToResponseMapper = phoneToResponseMapper;
-  }
-
   @PostMapping("/phones")
   public PhoneResponse savePhone(@RequestBody PhoneDto phoneDto) {
     Phone phone = phoneService.savePhone(phoneToEntityMapper.toMap(phoneDto));
     return phoneToResponseMapper.toMap(phone);
   }
 
+  /**
+   * Metodo que obtiene todos los telefonos de un usuario a partir del ID.
+   *
+   * @param userId ID del usuario.
+   * @return Lista de telefonos del usuario.
+   */
   @GetMapping("/phones/{userId}")
   public List<PhoneResponse> allUserPhones(@PathVariable String userId) {
-    return phoneService.allUserPhones(userId).stream()
+    return phoneService.getAllPhonesForUser(userId).stream()
       .map(phoneToResponseMapper::toMap)
-      .collect(Collectors.toList());
+      .toList();
   }
 
 }
