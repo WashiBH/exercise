@@ -27,24 +27,20 @@ public class UserServiceImpl implements UserService{
 
   @Override
   public User saveUser(User user) {
-    try {
-      LocalDateTime currentTime = LocalDateTime.now();
-      user.setCreatedAt(currentTime);
-      user.setLastLoginAt(currentTime);
-      user.setIsActive(true);
-      user.setPassword(passwordEncoder.encode(user.getPassword()));
-      user.setToken(jwtService.generateToken(user));
+    LocalDateTime currentTime = LocalDateTime.now();
+    user.setCreatedAt(currentTime);
+    user.setLastLoginAt(currentTime);
+    user.setIsActive(true);
+    user.setPassword(passwordEncoder.encode(user.getPassword()));
+    user.setToken(jwtService.generateToken(user));
 
-      Optional<User> userOptional = userDao.saveUser(user);
+    Optional<User> userOptional = userDao.saveUser(user);
 
-      if (userOptional.isEmpty()){
-        throw new UserException("Algo salió mal, espere un momento por favor.");
-      }
-
-      return userOptional.get();
-    } catch (DataIntegrityViolationException ex) {
-      throw new UniqueConstraintViolationException("El email ya está en uso.");
+    if (userOptional.isEmpty()){
+      throw new UserException("Algo salió mal, espere un momento por favor.");
     }
+
+    return userOptional.get();
   }
 
   @Override
