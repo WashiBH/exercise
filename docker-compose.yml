@@ -1,0 +1,75 @@
+version: "3.9"
+services:
+  config-server:
+    container_name: config-server
+    build:
+      context: ./
+      dockerfile: ./config-server/Dockerfile
+    ports:
+      - "8888:8888"
+    env_file:
+      - ./config-server/.env
+    networks:
+      - spring
+    restart: always
+
+  discovery-server:
+    container_name: discovery-server
+    build:
+      context: ./
+      dockerfile: ./discovery-server/Dockerfile
+    ports:
+      - "8761:8761"
+    env_file:
+      - ./discovery-server/.env
+    networks:
+      - spring
+    restart: always
+
+  api-gateway:
+    container_name: api-gateway
+    build:
+      context: ./
+      dockerfile: ./api-gateway/Dockerfile
+    ports:
+      - "8588:8588"
+    env_file:
+      - ./api-gateway/.env
+    networks:
+      - spring
+    restart: always
+    depends_on:
+      - discovery-server
+
+  users:
+    container_name: users
+    build:
+      context: ./
+      dockerfile: ./users/Dockerfile
+    ports:
+      - "8581:8581"
+    env_file:
+      - ./users/.env
+    networks:
+      - spring
+    restart: always
+    depends_on:
+      - phones
+      - discovery-server
+
+  phones:
+    container_name: phones
+    build:
+      context: ./
+      dockerfile: ./phones/Dockerfile
+    ports:
+      - "8582:8582"
+    env_file:
+      - ./phones/.env
+    networks:
+      - spring
+    restart: always
+
+networks:
+  spring:
+    name: spring

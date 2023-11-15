@@ -12,14 +12,12 @@ import com.demo.users.integration.mapper.UserToResponseMapper;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -38,15 +36,6 @@ public class UserRestController {
 
   @PostMapping("/users")
   public ResponseEntity<Map<String, Object>> addUser( @Valid @RequestBody UserDto userDto) {
-    /*ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-    Validator validator = factory.getValidator();
-
-
-    Set<ConstraintViolation<UserDto>> violations = validator.validate(userDto);
-    if (!violations.isEmpty()) {
-      System.out.println("Hay errores");
-    }*/
-
     Map<String, Object> response = new HashMap<>();
     User user = userService.saveUser(userToEntityMapper.toMap(userDto));
     this.saveAllPhones(user.getId(), userDto.getPhones());

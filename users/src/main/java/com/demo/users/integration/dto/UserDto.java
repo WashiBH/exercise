@@ -23,7 +23,7 @@ public class UserDto {
 
   @Size(min = 1, message = "El tamaño mínimo del campo password es 1 caracter.")
   @NotNull(message = "El password no puede ser nulo.")
-  @Pattern(message = "La contraseña debe contener una mayuscula, letras minúsculas, y dos numeros.", regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=(?:[^0-9]*[0-9]){2})[A-Za-z0-9]*$")
+  @Pattern(message = "La contraseña debe contener una mayúscula, letras minúsculas, y dos numeros.", regexp = "^(?=[a-z]*[A-Z][a-z]*)(?=(?:[^0-9]*[0-9]){2}$)[A-Za-z0-9]*$")
   private String password;
 
   private List<PhoneDto> phones;
